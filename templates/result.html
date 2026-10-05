@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="brand">🌦️ DiseaseRisk AI</div>
+    <div class="nav-links">
+        <a href="/">New Prediction</a>
+        <a href="/about">About</a>
+    </div>
+</nav>
+
+<main class="container result-container">
+    <section class="result-hero">
+        <div>
+            <span class="eyebrow">PREDICTION RESULT</span>
+            <h1>{{ location }} · {{ month }}</h1>
+            <p>{{ risk_message }}</p>
+        </div>
+        <div class="risk-badge risk-{{ prediction|lower }}">
+            {{ prediction|upper }} RISK
+        </div>
+    </section>
+
+    <section class="result-grid">
+        <div class="card">
+            <h2>Model output</h2>
+            <div class="score">{{ confidence }}<span>%</span></div>
+            <p class="muted">Model confidence for the predicted class. This is not a medical probability.</p>
+            <div class="progress"><div style="width: {{ confidence }}%"></div></div>
+
+            <div class="details">
+                <div><span>Location</span><strong>{{ location }}</strong></div>
+                <div><span>Area</span><strong>{{ area }}</strong></div>
+                <div><span>Month</span><strong>{{ month }}</strong></div>
+                <div><span>Temperature</span><strong>{{ temperature }} °C</strong></div>
+                <div><span>Humidity</span><strong>{{ humidity }} %</strong></div>
+                <div><span>Rainfall</span><strong>{{ rainfall }} mm</strong></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Location map</h2>
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <section class="card awareness">
+        <h2>General awareness</h2>
+        <p>These are general preventive measures for an academic prototype and should not replace medical advice.</p>
+        <ul>
+            {% for item in prevention %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <a class="secondary-btn" href="/">← Make another prediction</a>
+</main>
+
+<footer>
+    <p>Academic project prototype • Not a medical diagnostic tool</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map('map').setView([{{ lat }}, {{ lon }}], 8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+L.marker([{{ lat }}, {{ lon }}]).addTo(map)
+    .bindPopup("<b>{{ location }}</b><br>Modeled risk: {{ prediction }}")
+    .openPopup();
+</script>
+</body>
+</html>

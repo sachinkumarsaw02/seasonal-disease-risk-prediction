@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seasonal Disease Risk Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="brand">🌦️ DiseaseRisk AI</div>
+    <div class="nav-links">
+        <a href="/">Prediction</a>
+        <a href="/about">About</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div>
+        <span class="eyebrow">MACHINE LEARNING PROJECT</span>
+        <h1>Seasonal Disease Risk Prediction</h1>
+        <p>Estimate seasonal environmental risk using temperature, humidity, rainfall, month and location data.</p>
+    </div>
+</header>
+
+<main class="container">
+    <section class="card">
+        <div class="section-title">
+            <div>
+                <h2>Enter environmental data</h2>
+                <p>Provide the conditions you want the model to evaluate.</p>
+            </div>
+        </div>
+
+        <form action="/predict" method="POST" class="form-grid">
+            <label>
+                Location
+                <select name="location" required>
+                    {% for location in locations %}
+                    <option value="{{ location }}">{{ location }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label>
+                Area Type
+                <select name="area" required>
+                    <option value="Urban">Urban</option>
+                    <option value="Rural">Rural</option>
+                </select>
+            </label>
+
+            <label>
+                Month
+                <select name="month" required>
+                    {% for value, name in months %}
+                    <option value="{{ value }}" {% if value == 7 %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label>
+                Temperature (°C)
+                <input type="number" name="temperature" value="28" step="0.1" min="0" max="55" required>
+            </label>
+
+            <label>
+                Humidity (%)
+                <input type="number" name="humidity" value="80" step="0.1" min="0" max="100" required>
+            </label>
+
+            <label>
+                Rainfall (mm)
+                <input type="number" name="rainfall" value="200" step="0.1" min="0" max="1000" required>
+            </label>
+
+            <div class="full">
+                <button class="primary-btn" type="submit">Predict Disease Risk →</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="info-grid">
+        <div class="mini-card">
+            <span>🤖</span>
+            <h3>ML Prediction</h3>
+            <p>Random Forest classifier trained on an educational synthetic dataset.</p>
+        </div>
+        <div class="mini-card">
+            <span>🗺️</span>
+            <h3>Interactive Map</h3>
+            <p>View the selected location and its modeled risk result.</p>
+        </div>
+        <div class="mini-card">
+            <span>📊</span>
+            <h3>Environmental Factors</h3>
+            <p>Temperature, humidity, rainfall, month and area are used as inputs.</p>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="section-title">
+            <div>
+                <h2>Location map</h2>
+                <p>Reference map for supported locations.</p>
+            </div>
+        </div>
+        <div id="map"></div>
+    </section>
+</main>
+
+<footer>
+    <p>Academic project prototype • Not a medical diagnostic tool</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map('map').setView([21.0, 78.5], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+const locations = {{ locations|tojson }};
+const coords = {
+    "Mumbai": [19.0760,72.8777],
+    "Pune": [18.5204,73.8567],
+    "Delhi": [28.6139,77.2090],
+    "Ranchi": [23.3441,85.3096],
+    "Kolkata": [22.5726,88.3639],
+    "Bengaluru": [12.9716,77.5946],
+    "Chennai": [13.0827,80.2707],
+    "Lucknow": [26.8467,80.9462],
+    "Patna": [25.5941,85.1376],
+    "Nagpur": [21.1458,79.0882]
+};
+
+locations.forEach(name => {
+    if (coords[name]) {
+        L.marker(coords[name]).addTo(map).bindPopup("<b>" + name + "</b><br>Supported location");
+    }
+});
+</script>
+</body>
+</html>

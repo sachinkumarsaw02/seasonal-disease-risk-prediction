@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="brand">🌦️ DiseaseRisk AI</div>
+    <div class="nav-links">
+        <a href="/">Prediction</a>
+        <a href="/about">About</a>
+    </div>
+</nav>
 
+<main class="container">
+    <section class="card">
+        <span class="eyebrow">PROJECT OVERVIEW</span>
+        <h1>Predictive Analysis of Seasonal Diseases in Rural/Urban Area</h1>
+        <p>This web-based academic prototype uses environmental and location-based inputs to estimate a seasonal disease-risk category.</p>
+
+        <h2>Objectives</h2>
+        <ul>
+            <li>Predict seasonal environmental disease risk using machine learning.</li>
+            <li>Identify potentially higher-risk locations in the prototype dataset.</li>
+            <li>Display the selected location on an interactive map.</li>
+            <li>Provide general health-awareness information.</li>
+        </ul>
+
+        <h2>Technology Stack</h2>
+        <div class="tech-list">
+            <span>Python</span><span>Flask</span><span>Scikit-learn</span>
+            <span>Pandas</span><span>NumPy</span><span>HTML</span>
+            <span>CSS</span><span>JavaScript</span><span>Leaflet.js</span>
+        </div>
+
+        <h2>Important limitation</h2>
+        <p>The included dataset is synthetic and intended for academic demonstration. The model should not be used for real-world medical diagnosis, public-health decisions, or individual health-risk assessment.</p>
+    </section>
+</main>
+
+<footer>
+    <p>Academic project prototype</p>
+</footer>
+</body>
+</html>
